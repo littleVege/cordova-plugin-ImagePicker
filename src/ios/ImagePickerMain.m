@@ -177,6 +177,11 @@
 
 //保存获取图片
 - (NSString *)saveAndGetImageDocuments:(UIImage *)currentImage withName:(NSString*)imageName{
+    // copy UiImage
+    UIGraphicsBeginImageContext(currentImage.size);
+    [currentImage drawInRect:CGRectMake(0, 0, currentImage.size.width, currentImage.size.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     
     NSData *imageData = UIImageJPEGRepresentation(currentImage, 0.8);
     
