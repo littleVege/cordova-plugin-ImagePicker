@@ -177,23 +177,40 @@
 
 //保存获取图片
 - (NSString *)saveAndGetImageDocuments:(UIImage *)currentImage withName:(NSString*)imageName{
-    // copy UiImage
-    UIGraphicsBeginImageContext(currentImage.size);
-    [currentImage drawInRect:CGRectMake(0, 0, currentImage.size.width, currentImage.size.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    // // copy UiImage
+    // UIGraphicsBeginImageContext(currentImage.size);
+    // [currentImage drawInRect:CGRectMake(0, 0, currentImage.size.width, currentImage.size.height)];
+    // UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    // UIGraphicsEndImageContext();
     
-    NSData *imageData = UIImageJPEGRepresentation(currentImage, 0.8);
+    // NSData *imageData = UIImageJPEGRepresentation(currentImage, 0.8);
     
+    // // 获取沙盒目录
+    // NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:imageName];
+    
+    // // 将图片写入文件
+    // [imageData writeToFile:fullPath atomically:NO];
+    
+    // NSString *sandoxPath=[NSString stringWithFormat:@"%@/Documents/%@",NSHomeDirectory(),imageName];
+    
+    // return sandoxPath;
+
+
+
+    NSData *imageData;
+    CGSize targetSize = CGSizeMake(self.width, self.height);
+    currentImage = [self imageByScalingNotCroppingForSize:currentImage toSize:targetSize];
+    imageData = UIImageJPEGRepresentation(currentImage, self.quality/100.0f);
+
+    NSRange range = [imageName rangeOfString:@"."];//匹配得到的下标
+    NSString *name = [imageName substringToIndex:range.location];//截取范围类的字符串
     // 获取沙盒目录
-    NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:imageName];
-    
+    NSString *fullPath = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/i"] stringByAppendingString:name]  stringByAppendingString:@".jpg"];
+
     // 将图片写入文件
     [imageData writeToFile:fullPath atomically:NO];
-    
-    NSString *sandoxPath=[NSString stringWithFormat:@"%@/Documents/%@",NSHomeDirectory(),imageName];
-    
-    return sandoxPath;
+
+    return fullPath;
     
 }
 
